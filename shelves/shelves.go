@@ -78,7 +78,7 @@ func (s *overflowShelf) numOrders() int {
 	return n
 }
 
-func (s *overflowShelf) store(orderID uuid.UUID, temp string, dacayRate float32) (bool, error) {
+func (s *overflowShelf) store(orderID uuid.UUID, temp string, decayRate float32) (bool, error) {
 	if s.numOrders() >= s.capacity {
 		return false, nil
 	}
@@ -90,8 +90,17 @@ func (s *overflowShelf) store(orderID uuid.UUID, temp string, dacayRate float32)
 	if ok {
 		return true, nil
 	}
-	slotSection[orderID] = dacayRate
+	slotSection[orderID] = decayRate
 	return true, nil
+}
+
+func (s *overflowShelf) has(orderID uuid.UUID, temp string) (bool, error) {
+	slotSection, err := s.getSlotSection(temp)
+	if err != nil {
+		return false, err
+	}
+	_, ok := slotSection[orderID]
+	return ok, nil
 }
 
 func (s *overflowShelf) remove(orderID uuid.UUID, temp string) (bool, error) {
@@ -109,13 +118,13 @@ func (s *overflowShelf) remove(orderID uuid.UUID, temp string) (bool, error) {
 }
 
 func (s *overflowShelf) popMax(temp string) (maxOrderID uuid.UUID, found bool, err error) {
-	maxDecayRate := float32(-1)
-
 	slotSection, err0 := s.getSlotSection(temp)
-	if err != nil {
+	if err0 != nil {
 		err = err0
 		return
 	}
+
+	maxDecayRate := float32(-1)
 
 	if len(slotSection) == 0 {
 		return
@@ -136,81 +145,94 @@ func (s *overflowShelf) popMax(temp string) (maxOrderID uuid.UUID, found bool, e
 type warehouse struct {
 	shelves  map[string]*primaryShelf
 	overflow overflowShelf
-	ps       *pubsub.PubSub
+	ps       event.PubSubInterface
 }
 
-func newWarehouse(ps *pubsub.PubSub) *warehouse {
+func newWarehouse(ps event.PubSubInterface, primaryCapacity int, overflowCapacity int) *warehouse {
 	shelves := map[string]*primaryShelf{
-		"hot":    newPrimaryShelf(15),
-		"cold":   newPrimaryShelf(15),
-		"frozen": newPrimaryShelf(15),
+		"hot":    newPrimaryShelf(primaryCapacity),
+		"cold":   newPrimaryShelf(primaryCapacity),
+		"frozen": newPrimaryShelf(primaryCapacity),
 	}
-	overflow := newOverflowShelf(20, []string{"hot", "cold", "frozen"})
+	overflow := newOverflowShelf(overflowCapacity, []string{"hot", "cold", "frozen"})
 	return &warehouse{shelves, overflow, ps}
 }
 
-func (pus *warehouse) store(order event.Order, temp string, Dt time.Time) bool {
-	primaryShelf := pus.shelves[temp]
+func (w *warehouse) store(order event.Order, temp string, Dt time.Time) (stored bool, err error) {
+	primaryShelf := w.shelves[temp]
 	if primaryShelf == nil {
-		// Error
-		fmt.Printf("Invalid temp: %+v\n", temp)
-		return false
+		err = errors.Errorf("Invalid temp: %+v", temp)
+		return
 	}
-	stored := primaryShelf.store(order.ID)
+	stored = primaryShelf.store(order.ID)
 	if stored {
 		shelvedEvent := &event.ShelvedEvent{Dt: Dt, Order: order, Shelf: temp}
-		// fmt.Print("SH^ ")
 
-		pus.ps.Pub(shelvedEvent, event.EventTypeShelved)
-		return true
+		w.ps.Pub(shelvedEvent, event.EventTypeShelved)
+		return
 	}
-	stored, _ = pus.overflow.store(order.ID, temp, order.DecayRate)
-	// fmt.Printf("Stored: %+v, in %+v, %+v\n", stored, "overflow", order.ID)
+	stored, err = w.overflow.store(order.ID, temp, order.DecayRate)
 	if stored {
 		shelvedEvent := &event.ShelvedEvent{Dt: Dt, Order: order, Shelf: "overflow"}
 		// fmt.Print("SH^ ")
-		pus.ps.Pub(shelvedEvent, event.EventTypeShelved)
-		return true
+		w.ps.Pub(shelvedEvent, event.EventTypeShelved)
+		return
 	}
-	return false
+	return
 }
 
-func (pus *warehouse) remove(orderID uuid.UUID, temp string) bool {
-	primaryShelf := pus.shelves[temp]
+func (w *warehouse) has(orderID uuid.UUID, temp string) (shelf string, found bool, err error) {
+	primaryShelf := w.shelves[temp]
 	if primaryShelf == nil {
-		// Error
-		fmt.Printf("Invalid temp: %+v\n", temp)
-		return false
+		err = errors.Errorf("Invalid temp: %+v", temp)
+		return
 	}
-	if ok := primaryShelf.remove(orderID); ok {
-		return true
+	found = primaryShelf.has(orderID)
+	if found {
+		shelf = temp
+		return
 	}
-	if ok, _ := pus.overflow.remove(orderID, temp); ok {
-		pus.reshelf(temp)
-		return ok
+	found, err = w.overflow.has(orderID, temp)
+	if found {
+		shelf = "overflow"
 	}
-	return false
+	return
 }
 
-func (pus *warehouse) reshelf(temp string) bool {
-	primaryShelf := pus.shelves[temp]
+func (w *warehouse) remove(orderID uuid.UUID, temp string) (done bool, err error) {
+	primaryShelf := w.shelves[temp]
 	if primaryShelf == nil {
-		// Error
-		fmt.Printf("Invalid temp: %+v\n", temp)
-		return false
+		err = errors.Errorf("Invalid temp: %+v", temp)
+		return
 	}
-	orderID, ok, _ := pus.overflow.popMax(temp)
-	if !ok {
+	done = primaryShelf.remove(orderID)
+	if done {
+		_, err = w.reshelf(temp)
+		return
+	}
+	done, err = w.overflow.remove(orderID, temp)
+	return
+}
+
+func (w *warehouse) reshelf(temp string) (found bool, err error) {
+	primaryShelf := w.shelves[temp]
+	if primaryShelf == nil {
+		err = errors.Errorf("Invalid temp: %+v", temp)
+		return
+	}
+	var orderID uuid.UUID
+	orderID, found, err = w.overflow.popMax(temp)
+	if err != nil || !found {
 		// Error
-		return false
+		return
 	}
 	primaryShelf.store(orderID)
-	return true
+	return
 }
 
 // Run runs
 func Run(ps *pubsub.PubSub) {
-	w := newWarehouse(ps)
+	w := newWarehouse(ps, 15, 20)
 
 	newOrderCh := ps.Sub(event.EventTypeNewOrder)
 	pickUpCh := ps.Sub(event.EventTypePickup)
@@ -227,7 +249,7 @@ func Run(ps *pubsub.PubSub) {
 				fmt.Printf("could not coerce to event: shelves, new, %+v\n", msg)
 				continue
 			}
-			stored := w.store(newOrderEvent.Order, newOrderEvent.Order.Temp, newOrderEvent.Dt)
+			stored, _ := w.store(newOrderEvent.Order, newOrderEvent.Order.Temp, newOrderEvent.Dt)
 			if !stored {
 				wasteEvent := &event.WasteEvent{Dt: newOrderEvent.Dt, Order: newOrderEvent.Order, Reason: event.WasteReasonNoShelfSpace}
 				// fmt.Print("WS^ ")

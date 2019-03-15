@@ -6,7 +6,12 @@ import (
 	"github.com/google/uuid"
 )
 
-// Eveny type enums
+type PubSubInterface interface {
+	Sub(...string) chan interface{}
+	Pub(interface{}, ...string)
+}
+
+// Event type enums
 const (
 	EventTypeNewOrder  = "newOrder"
 	EventTypeShelved   = "shelved"
@@ -77,4 +82,5 @@ type ValueEvent struct {
 	Value     float32
 	NormValue float32
 	Order     Order
+	LastMoved time.Time
 }

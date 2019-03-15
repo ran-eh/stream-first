@@ -39,6 +39,13 @@ func (s orderState) value(now time.Time) float32 {
 	return float32(value)
 }
 
+func (s orderState) lastMoved(t1, t2 time.Time) time.Time {
+	if t1.After(t2) {
+		return t1
+	}
+	return t2
+}
+
 // Run runs
 func Run(ps *pubsub.PubSub) {
 	orderStates := map[uuid.UUID]*orderState{}
@@ -96,12 +103,12 @@ func Run(ps *pubsub.PubSub) {
 			value := state.value(now)
 			if value <= 0 {
 				delete(orderStates, orderID)
-				// fmt.Print("EX^ ")
 				ps.Pub(&event.ExpiredEvent{Dt: now, Order: *state.order}, event.EventTypeExpired)
 			} else {
 				value := state.value(now)
 				normValue := value / state.order.ShelfLife
-				// fmt.Print("VL^ ")
+
+				lastMoved := state.lastMoved(state.startTimePrimary, state.startTimeOverflow)
 
 				ps.Pub(&event.ValueEvent{
 					Dt:        now,
@@ -109,6 +116,7 @@ func Run(ps *pubsub.PubSub) {
 					Shelf:     state.shelf,
 					Value:     value,
 					NormValue: normValue,
+					LastMoved: lastMoved,
 				},
 					event.EventTypeValue)
 			}

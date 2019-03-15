@@ -1,8 +1,7 @@
 package main
 
 import (
-	"stream-first/display"
-	"stream-first/keyboard"
+	display "stream-first/io"
 	"stream-first/pickup"
 	"stream-first/shelflife"
 	"stream-first/shelves"
@@ -128,7 +127,7 @@ func main() {
 
 	ps := pubsub.New(1000)
 
-	go keyboard.Run(kbdCh)
+	//go keyboard.Run(kbdCh)
 	// go displayRun(ps)
 	go display.Run(ps)
 	go input.Run(ps)
