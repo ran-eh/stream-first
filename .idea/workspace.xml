@@ -1,20 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6b3336fb-a18e-4d9c-a08a-e090564d0278" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vscode/launch.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/launch.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/event/event.go" beforeDir="false" afterPath="$PROJECT_DIR$/common/common.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pickup/pickup.go" beforeDir="false" afterPath="$PROJECT_DIR$/pickup/pickup.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shelf/shelf.go" beforeDir="false" afterPath="$PROJECT_DIR$/shelf/shelf.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shelf/shelf_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/shelf/shelf_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shelflife/shelflife.go" beforeDir="false" afterPath="$PROJECT_DIR$/shelflife/shelflife.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/simneworders/simneworders.go" beforeDir="false" afterPath="$PROJECT_DIR$/simneworders/simneworders.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/display.go" beforeDir="false" afterPath="$PROJECT_DIR$/ui/display.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ui/keyboard/keyboard.go" beforeDir="false" afterPath="$PROJECT_DIR$/ui/keyboard/keyboard.go" afterDir="false" />
-    </list>
+    <list default="true" id="6b3336fb-a18e-4d9c-a08a-e090564d0278" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -380,12 +367,12 @@
     <frame x="-7" y="6" width="1843" height="1015" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49579832" visible="true" weight="0.13796972" />
-      <window_info id="Structure" order="1" sideWeight="0.5042017" side_tool="true" visible="true" weight="0.13796972" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4957699" visible="true" weight="0.13796972" />
+      <window_info id="Structure" order="1" sideWeight="0.50423014" side_tool="true" visible="true" weight="0.13796972" />
       <window_info id="Favorites" order="2" sideWeight="0.5008606" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4957936" weight="0.32993197" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.8278183" visible="true" weight="0.32539684" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.8278183" weight="0.32539684" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.6130118" weight="0.39909297" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -394,7 +381,7 @@
       <window_info anchor="bottom" id="Database Changes" order="8" />
       <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49971956" weight="0.32993197" />
       <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.68648344" weight="0.7165533" />
-      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.17218171" side_tool="true" visible="true" weight="0.32539684" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.17218171" side_tool="true" visible="true" weight="0.32993197" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
