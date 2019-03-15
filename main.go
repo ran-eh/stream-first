@@ -1,11 +1,11 @@
 package main
 
 import (
-	display "stream-first/io"
 	"stream-first/pickup"
+	"stream-first/shelf"
 	"stream-first/shelflife"
-	"stream-first/shelves"
-	input "stream-first/simulatedinputstream"
+	input "stream-first/simneworders"
+	display "stream-first/ui"
 
 	"github.com/cskr/pubsub"
 )
@@ -131,7 +131,7 @@ func main() {
 	// go displayRun(ps)
 	go display.Run(ps)
 	go input.Run(ps)
-	go shelves.Run(ps)
+	go shelf.Run(ps)
 	go shelflife.Run(ps)
 	go pickup.Run(ps)
 

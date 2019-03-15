@@ -1,4 +1,4 @@
-package simulatedinputstream
+package simneworders
 
 import (
 	"encoding/json"

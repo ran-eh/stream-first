@@ -1,4 +1,4 @@
-package shelves
+package shelf
 
 import (
 	"github.com/google/uuid"
