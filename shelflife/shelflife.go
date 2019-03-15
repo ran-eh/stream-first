@@ -2,7 +2,7 @@ package shelflife
 
 import (
 	"fmt"
-	"stream-first/event"
+	"stream-first/common"
 	"time"
 
 	"github.com/cskr/pubsub"
@@ -10,7 +10,7 @@ import (
 )
 
 type orderState struct {
-	order             *event.Order
+	order             *common.Order
 	shelf             string
 	startTimePrimary  time.Time
 	startTimeOverflow time.Time
@@ -50,17 +50,15 @@ func (s orderState) lastMoved(t1, t2 time.Time) time.Time {
 func Run(ps *pubsub.PubSub) {
 	orderStates := map[uuid.UUID]*orderState{}
 
-	shelvedCh := ps.Sub(event.EventTypeShelved)
-	reshelvedCh := ps.Sub(event.EventTypeReshelved)
-	pickupCh := ps.Sub(event.EventTypePickup)
-
-	fmt.Println("Starting shelflife loop")
+	shelvedCh := ps.Sub(common.EventTypeShelved)
+	reshelvedCh := ps.Sub(common.EventTypeReshelved)
+	pickupCh := ps.Sub(common.EventTypePickup)
 
 	for {
 		select {
 		case msg := <-shelvedCh:
 			// fmt.Print("SHv ")
-			shelvedEvent, ok := msg.(*event.ShelvedEvent)
+			shelvedEvent, ok := msg.(*common.ShelvedEvent)
 			if !ok {
 				// Error
 				fmt.Printf("could not coerce to event: shelfline, Shelved, %+v\n", msg)
@@ -77,7 +75,7 @@ func Run(ps *pubsub.PubSub) {
 			}
 		case msg := <-reshelvedCh:
 			// fmt.Print("RSv ")
-			reshelvedEvent, ok := msg.(*event.ReshelvedEvent)
+			reshelvedEvent, ok := msg.(*common.ReshelvedEvent)
 			if !ok {
 				// Error
 				fmt.Printf("could not coerce to event: shelfline, Reshelved, %+v\n", msg)
@@ -87,10 +85,11 @@ func Run(ps *pubsub.PubSub) {
 				// error
 				continue
 			}
+			state.shelf = state.order.Temp
 			state.startTimePrimary = reshelvedEvent.Dt
 		case msg := <-pickupCh:
 			// fmt.Print("PUv ")
-			pickupEvent, ok := msg.(*event.PickupEvent)
+			pickupEvent, ok := msg.(*common.PickupEvent)
 			if !ok {
 				// Error
 				fmt.Printf("could not coerce to event: shelfline, Pickup, %+v\n", msg)
@@ -103,14 +102,14 @@ func Run(ps *pubsub.PubSub) {
 			value := state.value(now)
 			if value <= 0 {
 				delete(orderStates, orderID)
-				ps.Pub(&event.ExpiredEvent{Dt: now, Order: *state.order}, event.EventTypeExpired)
+				ps.Pub(&common.ExpiredEvent{Dt: now, Order: *state.order}, common.EventTypeExpired)
 			} else {
 				value := state.value(now)
 				normValue := value / state.order.ShelfLife
 
 				lastMoved := state.lastMoved(state.startTimePrimary, state.startTimeOverflow)
 
-				ps.Pub(&event.ValueEvent{
+				ps.Pub(&common.ValueEvent{
 					Dt:        now,
 					Order:     *state.order,
 					Shelf:     state.shelf,
@@ -118,7 +117,7 @@ func Run(ps *pubsub.PubSub) {
 					NormValue: normValue,
 					LastMoved: lastMoved,
 				},
-					event.EventTypeValue)
+					common.EventTypeValue)
 			}
 		}
 	}

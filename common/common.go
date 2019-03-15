@@ -1,4 +1,4 @@
-package event
+package common
 
 import (
 	"time"
@@ -20,6 +20,7 @@ const (
 	EventTypePickup    = "pickup"
 	EventTypeExpired   = "expired"
 	EventTypeValue     = "value"
+	EventTypeKeyboard  = "keyboard"
 )
 
 // Order data

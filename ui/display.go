@@ -3,7 +3,7 @@ package ui
 import (
 	"fmt"
 	"sort"
-	"stream-first/event"
+	"stream-first/common"
 	"time"
 
 	"github.com/cskr/pubsub"
@@ -52,7 +52,7 @@ func newWarehouse() *warehouse {
 	return oss
 }
 
-func (w *warehouse) SetValue(e *event.ValueEvent) {
+func (w *warehouse) SetValue(e *common.ValueEvent) {
 	o, ok := w.orders[e.Order.ID]
 	if !ok {
 		o = &order{id: e.Order.ID, name: e.Order.Name, temp: e.Order.Temp, shelf: e.Shelf}
@@ -79,25 +79,6 @@ func (w *warehouse) waste() {
 
 func (w warehouse) render() {
 	tm.Clear()
-	// screen.MoveTopLeft()
-	//goterm.MoveCursor(1, 1)
-	//for _, s := range []string{"frozen", "cold", "hot", "overflow"} {
-	//	os := w.getOrders(s)
-	//	goterm.Printf("====== %v ======\n", s)
-	//	for _, o := range os {
-	//		o.render()
-	//	}
-	//	// goterm.Flush()
-	//}
-	//goterm.Println("====== WASTE ======")
-	//goterm.Println(w.wasteCount)
-	//goterm.Flush()
-
-	//table := tm.NewTable(0, 10, 5, ' ', 0)
-	//fmt.Fprintf(table, "frozen\tcold\thot\toverflow\n")
-	//fmt.Fprintf(table, "%s\t%d\t%d\t%d\n", "All", started, started-finished, finished)
-	//tm.Println(totals)
-	//tm.Flush()
 	shelves := []string{"frozen", "cold", "hot", "overflow"}
 	boxes := [4]*tm.Box{}
 	width := 50
@@ -130,44 +111,59 @@ func Run(ps *pubsub.PubSub) {
 
 	w := newWarehouse()
 
-	valueCh := ps.Sub(event.EventTypeValue)
-	pickupCh := ps.Sub(event.EventTypePickup)
-	expiredCh := ps.Sub(event.EventTypeExpired)
-	wasteCh := ps.Sub(event.EventTypeWaste)
+	valueCh := ps.Sub(common.EventTypeValue)
+	pickupCh := ps.Sub(common.EventTypePickup)
+	expiredCh := ps.Sub(common.EventTypeExpired)
+	wasteCh := ps.Sub(common.EventTypeWaste)
+
+	kbdCh := ps.Sub(common.EventTypeKeyboard)
+
+	tickCh := time.Tick(1 * time.Second)
 
 	for {
 		select {
 		case msg := <-valueCh:
 			// fmt.Print("VLv ")
-			e, ok := msg.(*event.ValueEvent)
+			e, ok := msg.(*common.ValueEvent)
 			if !ok {
 				fmt.Printf("could not coerce to event: %v, valueCh, %+v\n", serviceName, msg)
 				continue
 			}
 			w.SetValue(e)
 		case msg := <-pickupCh:
-			e, ok := msg.(*event.PickupEvent)
+			e, ok := msg.(*common.PickupEvent)
 			if !ok {
 				fmt.Printf("could not coerce to event: display, pickupCh, %+v\n", msg)
 				continue
 			}
 			w.remove(e.Order.ID)
 		case msg := <-expiredCh:
-			e, ok := msg.(*event.ExpiredEvent)
+			e, ok := msg.(*common.ExpiredEvent)
 			if !ok {
 				fmt.Printf("could not coerce to event: display, expiredCh, %+v\n", msg)
 				continue
 			}
 			w.remove(e.Order.ID)
 		case msg := <-wasteCh:
-			// fmt.Print("WSv ")
-			_, ok := msg.(*event.WasteEvent)
+			_, ok := msg.(*common.WasteEvent)
 			if !ok {
 				fmt.Printf("could not coerce to event: display, wasteCh, %+v\n", msg)
 				continue
 			}
 			w.waste()
+		case <-tickCh:
+			w.render()
+		case msg := <-kbdCh:
+			r, ok := msg.(rune)
+			if !ok {
+				fmt.Printf("could not coerce to event: display, wasteCh, %+v\n", msg)
+				continue
+			}
+			switch r {
+			case 'k':
+			case 'K':
+
+			}
 		}
-		w.render()
 	}
 }

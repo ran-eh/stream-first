@@ -5,7 +5,7 @@ import (
 	"github.com/pkg/errors"
 	"time"
 
-	"stream-first/event"
+	"stream-first/common"
 
 	"github.com/cskr/pubsub"
 	"github.com/google/uuid"
@@ -145,10 +145,10 @@ func (s *overflowShelf) popMax(temp string) (maxOrderID uuid.UUID, found bool, e
 type warehouse struct {
 	shelves  map[string]*primaryShelf
 	overflow overflowShelf
-	ps       event.PubSubInterface
+	ps       common.PubSubInterface
 }
 
-func newWarehouse(ps event.PubSubInterface, primaryCapacity int, overflowCapacity int) *warehouse {
+func newWarehouse(ps common.PubSubInterface, primaryCapacity int, overflowCapacity int) *warehouse {
 	shelves := map[string]*primaryShelf{
 		"hot":    newPrimaryShelf(primaryCapacity),
 		"cold":   newPrimaryShelf(primaryCapacity),
@@ -158,7 +158,7 @@ func newWarehouse(ps event.PubSubInterface, primaryCapacity int, overflowCapacit
 	return &warehouse{shelves, overflow, ps}
 }
 
-func (w *warehouse) store(order event.Order, temp string, Dt time.Time) (stored bool, err error) {
+func (w *warehouse) store(order common.Order, temp string, Dt time.Time) (stored bool, err error) {
 	primaryShelf := w.shelves[temp]
 	if primaryShelf == nil {
 		err = errors.Errorf("Invalid temp: %+v", temp)
@@ -166,16 +166,16 @@ func (w *warehouse) store(order event.Order, temp string, Dt time.Time) (stored 
 	}
 	stored = primaryShelf.store(order.ID)
 	if stored {
-		shelvedEvent := &event.ShelvedEvent{Dt: Dt, Order: order, Shelf: temp}
+		shelvedEvent := &common.ShelvedEvent{Dt: Dt, Order: order, Shelf: temp}
 
-		w.ps.Pub(shelvedEvent, event.EventTypeShelved)
+		w.ps.Pub(shelvedEvent, common.EventTypeShelved)
 		return
 	}
 	stored, err = w.overflow.store(order.ID, temp, order.DecayRate)
 	if stored {
-		shelvedEvent := &event.ShelvedEvent{Dt: Dt, Order: order, Shelf: "overflow"}
+		shelvedEvent := &common.ShelvedEvent{Dt: Dt, Order: order, Shelf: "overflow"}
 		// fmt.Print("SH^ ")
-		w.ps.Pub(shelvedEvent, event.EventTypeShelved)
+		w.ps.Pub(shelvedEvent, common.EventTypeShelved)
 		return
 	}
 	return
@@ -199,7 +199,7 @@ func (w *warehouse) has(orderID uuid.UUID, temp string) (shelf string, found boo
 	return
 }
 
-func (w *warehouse) remove(orderID uuid.UUID, temp string) (done bool, err error) {
+func (w *warehouse) remove(orderID uuid.UUID, temp string, dt time.Time) (done bool, err error) {
 	primaryShelf := w.shelves[temp]
 	if primaryShelf == nil {
 		err = errors.Errorf("Invalid temp: %+v", temp)
@@ -207,14 +207,14 @@ func (w *warehouse) remove(orderID uuid.UUID, temp string) (done bool, err error
 	}
 	done = primaryShelf.remove(orderID)
 	if done {
-		_, err = w.reshelf(temp)
+		_, err = w.reshelf(temp, dt)
 		return
 	}
 	done, err = w.overflow.remove(orderID, temp)
 	return
 }
 
-func (w *warehouse) reshelf(temp string) (found bool, err error) {
+func (w *warehouse) reshelf(temp string, dt time.Time) (found bool, err error) {
 	primaryShelf := w.shelves[temp]
 	if primaryShelf == nil {
 		err = errors.Errorf("Invalid temp: %+v", temp)
@@ -227,6 +227,8 @@ func (w *warehouse) reshelf(temp string) (found bool, err error) {
 		return
 	}
 	primaryShelf.store(orderID)
+	reshelvedEvent := &common.ReshelvedEvent{dt, orderID}
+	w.ps.Pub(reshelvedEvent, common.EventTypeReshelved)
 	return
 }
 
@@ -234,16 +236,16 @@ func (w *warehouse) reshelf(temp string) (found bool, err error) {
 func Run(ps *pubsub.PubSub) {
 	w := newWarehouse(ps, 15, 20)
 
-	newOrderCh := ps.Sub(event.EventTypeNewOrder)
-	pickUpCh := ps.Sub(event.EventTypePickup)
-	expiredCh := ps.Sub(event.EventTypeExpired)
+	newOrderCh := ps.Sub(common.EventTypeNewOrder)
+	pickUpCh := ps.Sub(common.EventTypePickup)
+	expiredCh := ps.Sub(common.EventTypeExpired)
 
 	for {
 		select {
 		case msg := <-newOrderCh:
 			// fmt.Print("NW*v ")
 			// fmt.Printf("newOrder received: %+v\n", msg)
-			newOrderEvent, ok := msg.(*event.NewOrderEvent)
+			newOrderEvent, ok := msg.(*common.NewOrderEvent)
 			if !ok {
 				// Error
 				fmt.Printf("could not coerce to event: shelves, new, %+v\n", msg)
@@ -251,28 +253,27 @@ func Run(ps *pubsub.PubSub) {
 			}
 			stored, _ := w.store(newOrderEvent.Order, newOrderEvent.Order.Temp, newOrderEvent.Dt)
 			if !stored {
-				wasteEvent := &event.WasteEvent{Dt: newOrderEvent.Dt, Order: newOrderEvent.Order, Reason: event.WasteReasonNoShelfSpace}
+				wasteEvent := &common.WasteEvent{Dt: newOrderEvent.Dt, Order: newOrderEvent.Order, Reason: common.WasteReasonNoShelfSpace}
 				// fmt.Print("WS^ ")
-				ps.Pub(wasteEvent, event.EventTypeWaste)
+				ps.Pub(wasteEvent, common.EventTypeWaste)
 			}
 		case msg := <-pickUpCh:
-			// fmt.Print("PU*v ")
-			pickupEvent, ok := msg.(*event.PickupEvent)
+			pickupEvent, ok := msg.(*common.PickupEvent)
 			if !ok {
 				// Error
 				fmt.Printf("could not coerce to event: shelves, pickup, %+v\n", msg)
 				continue
 			}
-			w.remove(pickupEvent.Order.ID, pickupEvent.Order.Temp)
+			w.remove(pickupEvent.Order.ID, pickupEvent.Order.Temp, pickupEvent.Dt)
 		case msg := <-expiredCh:
 			// fmt.Print("EXv ")
-			expiredEvent, ok := msg.(*event.ExpiredEvent)
+			expiredEvent, ok := msg.(*common.ExpiredEvent)
 			if !ok {
 				// Error
 				fmt.Printf("could not coerce to event: shelves, expired, %+v\n", msg)
 				continue
 			}
-			w.remove(expiredEvent.Order.ID, expiredEvent.Order.Temp)
+			w.remove(expiredEvent.Order.ID, expiredEvent.Order.Temp, expiredEvent.Dt)
 		}
 	}
 }

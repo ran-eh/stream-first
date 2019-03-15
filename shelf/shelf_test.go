@@ -5,7 +5,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
-	"stream-first/event"
+	"stream-first/common"
 	"testing"
 	"time"
 )
@@ -16,20 +16,11 @@ var (
 		uuid.New(), uuid.New(), uuid.New(), uuid.New(), uuid.New()}
 )
 
-func generateOrderIds(number int) []uuid.UUID {
-	orderIDs := []uuid.UUID{}
+func generateOrderIds(number int) (orderIDs []uuid.UUID) {
 	for i := 0; i < number; i++ {
 		orderIDs = append(orderIDs, uuid.New())
 	}
-	return orderIDs
-}
-
-func initPrimaryShelf(capacity int, temps []uuid.UUID) *primaryShelf {
-	s := newPrimaryShelf(capacity)
-	for _, orderID := range temps {
-		s.store(orderID)
-	}
-	return s
+	return
 }
 
 func Test_primaryShelf_store(t *testing.T) {
@@ -280,17 +271,17 @@ type mockPubSub struct {
 
 func Test_warehouse_store_has(t *testing.T) {
 	t.Run("store fails for invalid temp", func(t *testing.T) {
-		ps := newMockPubSub(1000)
+		ps := newMockPubSub()
 		w := newWarehouse(ps, 3, 5)
-		o := event.Order{}
+		o := common.Order{}
 		_, err := w.store(o, "blah", time.Time{})
 		assert.Error(t, err)
 	})
 	t.Run("store in primary for expected temp when primary is not full", func(t *testing.T) {
-		ps := newMockPubSub(1000)
+		ps := newMockPubSub()
 		w := newWarehouse(ps, 4, 5)
 		for _, id := range []uuid.UUID{orderIDs[1], orderIDs[2], orderIDs[3], orderIDs[4]} {
-			stored, storeErr := w.store(event.Order{ID: id}, "frozen", time.Time{})
+			stored, storeErr := w.store(common.Order{ID: id}, "frozen", time.Time{})
 			require.NoError(t, storeErr)
 			require.True(t, stored)
 			shelf, found, err := w.has(id, "frozen")
@@ -303,14 +294,14 @@ func Test_warehouse_store_has(t *testing.T) {
 		}
 	})
 	t.Run("store in overflow when primary is full", func(t *testing.T) {
-		ps := newMockPubSub(1000)
+		ps := newMockPubSub()
 		w := newWarehouse(ps, 3, 5)
 
 		// Fill up primary
 		for _, id := range []uuid.UUID{orderIDs[1], orderIDs[2], orderIDs[3]} {
-			_, _ = w.store(event.Order{ID: id}, "frozen", time.Time{})
+			_, _ = w.store(common.Order{ID: id}, "frozen", time.Time{})
 		}
-		stored, _ := w.store(event.Order{ID: orderIDs[4]}, "frozen", time.Time{})
+		stored, _ := w.store(common.Order{ID: orderIDs[4]}, "frozen", time.Time{})
 		require.True(t, stored)
 		shelf, found, err := w.has(orderIDs[4], "frozen")
 		require.NoError(t, err)
@@ -318,15 +309,15 @@ func Test_warehouse_store_has(t *testing.T) {
 		assert.Equal(t, "overflow", shelf)
 	})
 	t.Run("store stores in overflow when overflow is nearly full", func(t *testing.T) {
-		ps := newMockPubSub(1000)
+		ps := newMockPubSub()
 		w := newWarehouse(ps, 3, 5)
 		orderIDs := generateOrderIds(8)
 
 		// Fill up primary and nearly all of overflow
 		for i := 0; i < 7; i++ {
-			_, _ = w.store(event.Order{ID: orderIDs[i]}, "frozen", time.Time{})
+			_, _ = w.store(common.Order{ID: orderIDs[i]}, "frozen", time.Time{})
 		}
-		stored, storeErr := w.store(event.Order{ID: orderIDs[7]}, "frozen", time.Time{})
+		stored, storeErr := w.store(common.Order{ID: orderIDs[7]}, "frozen", time.Time{})
 		require.NoError(t, storeErr)
 		require.True(t, stored)
 		shelf, found, err := w.has(orderIDs[7], "frozen")
@@ -335,15 +326,15 @@ func Test_warehouse_store_has(t *testing.T) {
 		assert.Equal(t, "overflow", shelf)
 	})
 	t.Run("store returns false and does not store when overflow is full", func(t *testing.T) {
-		ps := newMockPubSub(1000)
+		ps := newMockPubSub()
 		w := newWarehouse(ps, 3, 5)
 		orderIDs := generateOrderIds(9)
 
 		// Fill up primary and overflow
 		for i := 0; i < 8; i++ {
-			_, _ = w.store(event.Order{ID: orderIDs[i]}, "frozen", time.Time{})
+			_, _ = w.store(common.Order{ID: orderIDs[i]}, "frozen", time.Time{})
 		}
-		stored, storeErr := w.store(event.Order{ID: orderIDs[8]}, "frozen", time.Time{})
+		stored, storeErr := w.store(common.Order{ID: orderIDs[8]}, "frozen", time.Time{})
 		require.NoError(t, storeErr)
 		require.False(t, stored)
 		_, found, err := w.has(orderIDs[8], "frozen")
@@ -355,22 +346,22 @@ func Test_warehouse_store_has(t *testing.T) {
 
 func Test_warehouse_remove(t *testing.T) {
 	t.Run("remove fails for invalid temp", func(t *testing.T) {
-		ps := newMockPubSub(1000)
+		ps := newMockPubSub()
 		w := newWarehouse(ps, 3, 5)
-		_, err := w.remove(uuid.New(), "blah")
+		_, err := w.remove(uuid.New(), "blah", time.Time{})
 		assert.Error(t, err)
 	})
 	t.Run("remove fails when not a member", func(t *testing.T) {
-		ps := newMockPubSub(1000)
+		ps := newMockPubSub()
 		w := newWarehouse(ps, 3, 5)
-		_, err := w.remove(uuid.New(), "hot")
+		_, err := w.remove(uuid.New(), "hot", time.Time{})
 		assert.Error(t, err)
 	})
 	t.Run("remove removes when in primary", func(t *testing.T) {
-		ps := newMockPubSub(1000)
+		ps := newMockPubSub()
 		w := newWarehouse(ps, 3, 5)
-		_, _ = w.store(event.Order{ID: orderIDs[0]}, "cold", time.Time{})
-		found, err := w.remove(orderIDs[0], "cold")
+		_, _ = w.store(common.Order{ID: orderIDs[0]}, "cold", time.Time{})
+		found, err := w.remove(orderIDs[0], "cold", time.Time{})
 		require.NoError(t, err)
 		require.True(t, found)
 		_, found, err = w.has(orderIDs[0], "cold")
@@ -378,14 +369,14 @@ func Test_warehouse_remove(t *testing.T) {
 		assert.False(t, found)
 	})
 	t.Run("remove removes and returns true when in overflow", func(t *testing.T) {
-		ps := newMockPubSub(1000)
+		ps := newMockPubSub()
 		w := newWarehouse(ps, 3, 5)
 		// Fill up primary
 		for i := 0; i < 3; i++ {
-			_, _ = w.store(event.Order{ID: orderIDs[i]}, "hot", time.Time{})
+			_, _ = w.store(common.Order{ID: orderIDs[i]}, "hot", time.Time{})
 		}
-		_, _ = w.store(event.Order{ID: orderIDs[3]}, "hot", time.Time{})
-		found, err := w.remove(orderIDs[3], "hot")
+		_, _ = w.store(common.Order{ID: orderIDs[3]}, "hot", time.Time{})
+		found, err := w.remove(orderIDs[3], "hot", time.Time{})
 		require.NoError(t, err)
 		require.True(t, found)
 		_, found, err = w.has(orderIDs[3], "hot")
@@ -393,21 +384,20 @@ func Test_warehouse_remove(t *testing.T) {
 		assert.False(t, found)
 	})
 	t.Run("remove reshelves order with max decay rate from overflow to primary when it becomes available", func(t *testing.T) {
-		ps := newMockPubSub(1000)
+		ps := newMockPubSub()
 		//ps.On("Pub", mock.Anything, "reshelved").Return()
-		ps.On("Pub", mock.Anything, mock.MatchedBy(func(topic string) bool { return topic == "reshelved" }))
-		ps.On("Pub", mock.Anything, mock.Anything).Return()
 		w := newWarehouse(ps, 3, 5)
 		// Fill up primary
 		for i := 0; i < 3; i++ {
-			_, _ = w.store(event.Order{ID: orderIDs[i]}, "hot", time.Time{})
+			_, _ = w.store(common.Order{ID: orderIDs[i]}, "hot", time.Time{})
 		}
-		_, _ = w.store(event.Order{ID: orderIDs[3], DecayRate: 1.1}, "hot", time.Time{})
-		_, _ = w.store(event.Order{ID: orderIDs[4], DecayRate: 1.6}, "hot", time.Time{})
-		_, _ = w.store(event.Order{ID: orderIDs[5], DecayRate: 1.2}, "hot", time.Time{})
-		_, _ = w.store(event.Order{ID: orderIDs[6], DecayRate: 1.7}, "hot", time.Time{})
-		_, _ = w.store(event.Order{ID: orderIDs[7], DecayRate: 1.2}, "hot", time.Time{})
-		found, err := w.remove(orderIDs[1], "hot")
+		_, _ = w.store(common.Order{ID: orderIDs[3], DecayRate: 1.1}, "hot", time.Time{})
+		_, _ = w.store(common.Order{ID: orderIDs[4], DecayRate: 1.6}, "hot", time.Time{})
+		_, _ = w.store(common.Order{ID: orderIDs[5], DecayRate: 1.2}, "hot", time.Time{})
+		_, _ = w.store(common.Order{ID: orderIDs[6], DecayRate: 1.7}, "hot", time.Time{})
+		_, _ = w.store(common.Order{ID: orderIDs[7], DecayRate: 1.2}, "hot", time.Time{})
+		ps.On("Pub", mock.Anything, mock.Anything).Return()
+		found, err := w.remove(orderIDs[1], "hot", time.Time{})
 		require.NoError(t, err)
 		require.True(t, found)
 		var shelf string
@@ -420,7 +410,7 @@ func Test_warehouse_remove(t *testing.T) {
 	})
 }
 
-func newMockPubSub(int) *mockPubSub {
+func newMockPubSub() *mockPubSub {
 	return &mockPubSub{}
 }
 

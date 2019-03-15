@@ -2,14 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6b3336fb-a18e-4d9c-a08a-e090564d0278" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/event/event.go" beforeDir="false" afterPath="$PROJECT_DIR$/event/event.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/io/display.go" beforeDir="false" afterPath="$PROJECT_DIR$/io/display.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/launch.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/launch.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/event/event.go" beforeDir="false" afterPath="$PROJECT_DIR$/common/common.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pickup/pickup.go" beforeDir="false" afterPath="$PROJECT_DIR$/pickup/pickup.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shelf/shelf.go" beforeDir="false" afterPath="$PROJECT_DIR$/shelf/shelf.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shelf/shelf_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/shelf/shelf_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shelflife/shelflife.go" beforeDir="false" afterPath="$PROJECT_DIR$/shelflife/shelflife.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shelves/shelves.go" beforeDir="false" afterPath="$PROJECT_DIR$/shelves/shelves.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shelves/shelves_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/shelves/shelves_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/simneworders/simneworders.go" beforeDir="false" afterPath="$PROJECT_DIR$/simneworders/simneworders.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/display.go" beforeDir="false" afterPath="$PROJECT_DIR$/ui/display.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui/keyboard/keyboard.go" beforeDir="false" afterPath="$PROJECT_DIR$/ui/keyboard/keyboard.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -26,31 +30,10 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/shelves/shelves.go">
+        <entry file="file://$PROJECT_DIR$/shelf/shelf.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-562">
-              <caret line="186" column="34" selection-start-line="186" selection-start-column="31" selection-end-line="186" selection-end-column="34" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../github.com/cskr/pubsub/pubsub.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="42" selection-start-line="41" selection-end-line="42" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="381">
-              <caret line="130" column="24" selection-start-line="130" selection-start-column="24" selection-end-line="130" selection-end-column="24" />
-              <folding>
-                <element signature="e#14#216#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="1819">
+              <caret line="230" column="54" selection-start-line="230" selection-start-column="54" selection-end-line="230" selection-end-column="54" />
             </state>
           </provider>
         </entry>
@@ -58,55 +41,85 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/shelflife/shelflife.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="395">
-              <caret line="118" column="29" selection-start-line="118" selection-start-column="29" selection-end-line="118" selection-end-column="29" />
+            <state relative-caret-position="172">
+              <caret line="56" selection-start-line="56" selection-end-line="56" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/event/event.go">
+        <entry file="file://$PROJECT_DIR$/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="429">
-              <caret line="84" column="23" selection-start-line="84" selection-start-column="23" selection-end-line="84" selection-end-column="23" />
+            <state relative-caret-position="124">
+              <caret line="26" selection-start-line="26" selection-end-line="26" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/shelves/shelves_test.go">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/common/common.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="471">
-              <caret line="418" column="61" lean-forward="true" selection-start-line="418" selection-start-column="61" selection-end-line="418" selection-end-column="61" />
-              <folding>
-                <element signature="e#17#102#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="68">
+              <caret line="8" column="20" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="20" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pickup/pickup.go">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/io/display.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="27" lean-forward="true" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="27" />
+            <state relative-caret-position="446">
+              <caret line="46" selection-start-line="46" selection-end-line="46" />
+              <folding>
+                <element signature="e#16#160#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ui/display.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="288">
+              <caret line="95" selection-start-line="95" selection-end-line="95" />
+              <folding>
+                <element signature="e#12#167#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ui/keyboard/keyboard.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="30" selection-start-line="30" selection-end-line="30" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="473">
-                <caret line="38" column="72" selection-start-line="38" selection-start-column="72" selection-end-line="38" selection-end-column="72" />
+              <first_editor relative-caret-position="104">
+                <caret line="19" column="33" selection-start-line="19" selection-start-column="33" selection-end-line="19" selection-end-column="33" />
               </first_editor>
               <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/stream-first.code-workspace">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/shelf/shelf_test.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="238">
+              <caret line="22" column="10" selection-start-line="22" selection-start-column="10" selection-end-line="22" selection-end-column="10" />
             </state>
           </provider>
         </entry>
@@ -136,8 +149,10 @@
       <find>valu</find>
       <find>render</find>
       <find>String(</find>
-      <find>Pub(</find>
       <find>slotNo</find>
+      <find>reshelf</find>
+      <find>Pub(</find>
+      <find>Here</find>
     </findStrings>
     <replaceStrings>
       <replace>orders[4]</replace>
@@ -152,12 +167,20 @@
       <list>
         <option value="$PROJECT_DIR$/mock/mock.go" />
         <option value="$PROJECT_DIR$/shelves/shelves.go" />
-        <option value="$PROJECT_DIR$/main.go" />
         <option value="$PROJECT_DIR$/shelves/shelves_test.go" />
-        <option value="$PROJECT_DIR$/event/event.go" />
-        <option value="$PROJECT_DIR$/shelflife/shelflife.go" />
         <option value="$PROJECT_DIR$/io/display.go" />
         <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/simneworders/simulatedinputstream.go" />
+        <option value="$PROJECT_DIR$/shelf/shelves.go" />
+        <option value="$PROJECT_DIR$/event/event.go" />
+        <option value="$PROJECT_DIR$/ui/keyboard/keyboard.go" />
+        <option value="$PROJECT_DIR$/common/common.go" />
+        <option value="$PROJECT_DIR$/pickup/pickup.go" />
+        <option value="$PROJECT_DIR$/shelf/shelf.go" />
+        <option value="$PROJECT_DIR$/main.go" />
+        <option value="$PROJECT_DIR$/shelflife/shelflife.go" />
+        <option value="$PROJECT_DIR$/ui/display.go" />
+        <option value="$PROJECT_DIR$/shelf/shelf_test.go" />
       </list>
     </option>
   </component>
@@ -191,17 +214,12 @@
             <path>
               <item name="stream-first" type="b2602c69:ProjectViewProjectNode" />
               <item name="stream-first" type="462c0819:PsiDirectoryNode" />
-              <item name="event" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="stream-first" type="b2602c69:ProjectViewProjectNode" />
-              <item name="stream-first" type="462c0819:PsiDirectoryNode" />
-              <item name="io" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="stream-first" type="b2602c69:ProjectViewProjectNode" />
-              <item name="stream-first" type="462c0819:PsiDirectoryNode" />
               <item name="pickup" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="stream-first" type="b2602c69:ProjectViewProjectNode" />
+              <item name="stream-first" type="462c0819:PsiDirectoryNode" />
+              <item name="shelf" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="stream-first" type="b2602c69:ProjectViewProjectNode" />
@@ -211,7 +229,18 @@
             <path>
               <item name="stream-first" type="b2602c69:ProjectViewProjectNode" />
               <item name="stream-first" type="462c0819:PsiDirectoryNode" />
-              <item name="shelves" type="462c0819:PsiDirectoryNode" />
+              <item name="simneworders" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="stream-first" type="b2602c69:ProjectViewProjectNode" />
+              <item name="stream-first" type="462c0819:PsiDirectoryNode" />
+              <item name="ui" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="stream-first" type="b2602c69:ProjectViewProjectNode" />
+              <item name="stream-first" type="462c0819:PsiDirectoryNode" />
+              <item name="ui" type="462c0819:PsiDirectoryNode" />
+              <item name="keyboard" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -243,16 +272,14 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Go Test.Test_warehouse_remove/remove_reshelves_order_with_max_decay_rate_from_overflow_to_primary_when_it_becomes_available in stream-first/shelves">
-    <configuration name="Test_warehouse_remove in stream-first/shelves" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Go Test.Test_warehouse_remove/remove_reshelves_order_with_max_decay_rate_from_overflow_to_primary_when_it_becomes_available in stream-first/shelf">
+    <configuration name="go build main.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="stream-first" />
-      <working_directory value="$PROJECT_DIR$/shelves" />
-      <framework value="gotest" />
-      <kind value="PACKAGE" />
-      <package value="stream-first/shelves" />
+      <working_directory value="$PROJECT_DIR$/" />
+      <kind value="FILE" />
+      <filePath value="$PROJECT_DIR$/main.go" />
+      <package value="stream-first" />
       <directory value="$PROJECT_DIR$/" />
-      <filePath value="$PROJECT_DIR$/" />
-      <pattern value="^Test_warehouse_remove$" />
       <method v="2" />
     </configuration>
     <configuration name="Test_warehouse_remove/remove_removes_and_returns_true_when_in_overflow in stream-first/shelves" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
@@ -266,15 +293,15 @@
       <pattern value="^Test_warehouse_remove$/^remove_removes_and_returns_true_when_in_overflow$" />
       <method v="2" />
     </configuration>
-    <configuration name="Test_warehouse_remove/remove_removes_when_in_primary in stream-first/shelves" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+    <configuration name="Test_warehouse_remove/remove_reshelves_order_with_max_decay_rate_from_overflow_to_primary_when_it_becomes_available in stream-first/shelf" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="stream-first" />
-      <working_directory value="$PROJECT_DIR$/shelves" />
+      <working_directory value="$PROJECT_DIR$/shelf" />
       <framework value="gotest" />
       <kind value="PACKAGE" />
-      <package value="stream-first/shelves" />
+      <package value="stream-first/shelf" />
       <directory value="$PROJECT_DIR$/" />
       <filePath value="$PROJECT_DIR$/" />
-      <pattern value="^Test_warehouse_remove$/^remove_removes_when_in_primary$" />
+      <pattern value="^Test_warehouse_remove$/^remove_reshelves_order_with_max_decay_rate_from_overflow_to_primary_when_it_becomes_available$" />
       <method v="2" />
     </configuration>
     <configuration name="Test_warehouse_remove/remove_reshelves_order_with_max_decay_rate_from_overflow_to_primary_when_it_becomes_available in stream-first/shelves" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
@@ -300,18 +327,15 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Test.Test_warehouse_remove/remove_reshelves_order_with_max_decay_rate_from_overflow_to_primary_when_it_becomes_available in stream-first/shelf" />
+        <item itemvalue="Go Build.go build main.go" />
         <item itemvalue="Go Test.Test_warehouse_remove/remove_reshelves_order_with_max_decay_rate_from_overflow_to_primary_when_it_becomes_available in stream-first/shelves" />
         <item itemvalue="Go Test.Test_warehouse_remove/remove_removes_and_returns_true_when_in_overflow in stream-first/shelves" />
         <item itemvalue="Go Test.go test stream-first" />
-        <item itemvalue="Go Test.Test_warehouse_remove in stream-first/shelves" />
-        <item itemvalue="Go Test.Test_warehouse_remove/remove_removes_when_in_primary in stream-first/shelves" />
       </list>
     </recent_temporary>
   </component>
   <component name="TestHistory">
-    <history-entry file="Test_warehouse_remove_remove_reshelves_order_with_max_decay_rate_from_overflow_to_primary_when_it_becomes_available_in_stream-first_shelves - 2019.03.14 at 16h 14m 01s.xml">
-      <configuration name="Test_warehouse_remove/remove_reshelves_order_with_max_decay_rate_from_overflow_to_primary_when_it_becomes_available in stream-first/shelves" configurationId="GoTestRunConfiguration" />
-    </history-entry>
     <history-entry file="Test_warehouse_remove_remove_reshelves_order_with_max_decay_rate_from_overflow_to_primary_when_it_becomes_available_in_stream-first_shelves - 2019.03.14 at 16h 15m 18s.xml">
       <configuration name="Test_warehouse_remove/remove_reshelves_order_with_max_decay_rate_from_overflow_to_primary_when_it_becomes_available in stream-first/shelves" configurationId="GoTestRunConfiguration" />
     </history-entry>
@@ -339,6 +363,9 @@
     <history-entry file="Test_warehouse_remove_remove_reshelves_order_with_max_decay_rate_from_overflow_to_primary_when_it_becomes_available_in_stream-first_shelves - 2019.03.14 at 16h 30m 50s.xml">
       <configuration name="Test_warehouse_remove/remove_reshelves_order_with_max_decay_rate_from_overflow_to_primary_when_it_becomes_available in stream-first/shelves" configurationId="GoTestRunConfiguration" />
     </history-entry>
+    <history-entry file="Test_warehouse_remove_remove_reshelves_order_with_max_decay_rate_from_overflow_to_primary_when_it_becomes_available_in_stream-first_shelf - 2019.03.15 at 02h 35m 11s.xml">
+      <configuration name="Test_warehouse_remove/remove_reshelves_order_with_max_decay_rate_from_overflow_to_primary_when_it_becomes_available in stream-first/shelf" configurationId="GoTestRunConfiguration" />
+    </history-entry>
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -353,21 +380,21 @@
     <frame x="-7" y="6" width="1843" height="1015" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4957699" visible="true" weight="0.13796972" />
-      <window_info id="Structure" order="1" sideWeight="0.50423014" side_tool="true" visible="true" weight="0.13796972" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49579832" visible="true" weight="0.13796972" />
+      <window_info id="Structure" order="1" sideWeight="0.5042017" side_tool="true" visible="true" weight="0.13796972" />
       <window_info id="Favorites" order="2" sideWeight="0.5008606" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49747616" visible="true" weight="0.32993197" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.83062255" weight="0.32426304" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49747616" weight="0.39909297" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4957936" weight="0.32993197" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.8278183" visible="true" weight="0.32539684" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.6130118" weight="0.39909297" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49925372" weight="0.3298731" />
+      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.49859786" weight="0.32879817" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" />
       <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49971956" weight="0.32993197" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49859786" weight="0.32879817" />
-      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.50252384" side_tool="true" visible="true" weight="0.32993197" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.68648344" weight="0.7165533" />
+      <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.17218171" side_tool="true" visible="true" weight="0.32539684" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -386,7 +413,7 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/shelves/shelves_test.go</url>
+          <url>file://$PROJECT_DIR$/shelf/shelf_test.go</url>
           <line>431</line>
           <properties />
           <option name="timeStamp" value="11" />
@@ -402,8 +429,56 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pickup/pickup.go">
+    <entry file="file://$PROJECT_DIR$/../github.com/cskr/pubsub/pubsub.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="42" selection-start-line="41" selection-end-line="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simneworders/simneworders.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="20" selection-start-column="8" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stream-first.code-workspace">
       <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ui/keyboard/keyboard.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="30" selection-start-line="30" selection-end-line="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pickup/pickup.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="446">
+          <caret line="46" selection-start-line="46" selection-end-line="46" />
+          <folding>
+            <element signature="e#16#160#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="124">
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="104">
+            <caret line="19" column="33" selection-start-line="19" selection-start-column="33" selection-end-line="19" selection-end-column="33" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
     </entry>
     <entry file="file://C:/Go/src/runtime/panic.go">
       <provider selected="true" editor-type-id="text-editor">
@@ -412,68 +487,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="381">
-          <caret line="130" column="24" selection-start-line="130" selection-start-column="24" selection-end-line="130" selection-end-column="24" />
-          <folding>
-            <element signature="e#14#216#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/shelves/shelves_test.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="471">
-          <caret line="418" column="61" lean-forward="true" selection-start-line="418" selection-start-column="61" selection-end-line="418" selection-end-column="61" />
-          <folding>
-            <element signature="e#17#102#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/event/event.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="429">
-          <caret line="84" column="23" selection-start-line="84" selection-start-column="23" selection-end-line="84" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/shelflife/shelflife.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="395">
-          <caret line="118" column="29" selection-start-line="118" selection-start-column="29" selection-end-line="118" selection-end-column="29" />
+        <state relative-caret-position="172">
+          <caret line="56" selection-start-line="56" selection-end-line="56" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../github.com/cskr/pubsub/pubsub.go">
+    <entry file="file://$PROJECT_DIR$/ui/display.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="42" selection-start-line="41" selection-end-line="42" />
+        <state relative-caret-position="288">
+          <caret line="95" selection-start-line="95" selection-end-line="95" />
+          <folding>
+            <element signature="e#12#167#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/shelves/shelves.go">
+    <entry file="file://$PROJECT_DIR$/shelf/shelf_test.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-562">
-          <caret line="186" column="34" selection-start-line="186" selection-start-column="31" selection-end-line="186" selection-end-column="34" />
+        <state relative-caret-position="238">
+          <caret line="22" column="10" selection-start-line="22" selection-start-column="10" selection-end-line="22" selection-end-column="10" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/io/display.go">
+    <entry file="file://$PROJECT_DIR$/shelf/shelf.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="27" lean-forward="true" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="27" />
+        <state relative-caret-position="1819">
+          <caret line="230" column="54" selection-start-line="230" selection-start-column="54" selection-end-line="230" selection-end-column="54" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="473">
-            <caret line="38" column="72" selection-start-line="38" selection-start-column="72" selection-end-line="38" selection-end-column="72" />
-          </first_editor>
-          <second_editor />
+    <entry file="file://$PROJECT_DIR$/common/common.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="68">
+          <caret line="8" column="20" selection-start-line="8" selection-start-column="5" selection-end-line="8" selection-end-column="20" />
         </state>
       </provider>
     </entry>

@@ -3,13 +3,15 @@ package keyboard
 import (
 	"bufio"
 	"fmt"
+	"github.com/cskr/pubsub"
 	"os"
+	"stream-first/common"
 
 	"golang.org/x/crypto/ssh/terminal"
 )
 
 // Run runs
-func Run(ch chan rune) {
+func Run(ps pubsub.PubSub) {
 	oldState, err := terminal.MakeRaw(int(os.Stdin.Fd()))
 	if err != nil {
 		fmt.Printf("error: %+v\n", err)
@@ -25,10 +27,6 @@ func Run(ch chan rune) {
 		if err != nil {
 			panic(err)
 		}
-		ch <- rune
-		// fmt.Printf("Rune: %v\n", rune)
-		if rune == 3 {
-			break
-		}
+		ps.Pub(rune, common.EventTypeKeyboard)
 	}
 }

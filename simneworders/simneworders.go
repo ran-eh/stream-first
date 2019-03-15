@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"log"
-	"stream-first/event"
+	"stream-first/common"
 	"time"
 
 	"github.com/cskr/pubsub"
@@ -20,7 +20,7 @@ func Run(ps *pubsub.PubSub) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	var data []event.Order
+	var data []common.Order
 	if err := json.Unmarshal(raw, &data); err != nil {
 		log.Fatal(err)
 	}
@@ -34,10 +34,10 @@ func Run(ps *pubsub.PubSub) {
 			timer := time.NewTimer(time.Duration(numSeconds * oneSecond))
 			now := <-timer.C
 			order.ID = uuid.New()
-			e := &event.NewOrderEvent{Dt: now, Order: order}
+			e := &common.NewOrderEvent{Dt: now, Order: order}
 			// fmt.Printf("Publish: %+v\n", e)
 			// fmt.Print("NW^ ")
-			ps.Pub(e, event.EventTypeNewOrder)
+			ps.Pub(e, common.EventTypeNewOrder)
 		}
 	}
 }
